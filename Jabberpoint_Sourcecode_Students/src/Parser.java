@@ -13,19 +13,10 @@ import java.io.IOException;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public abstract class Accessor {
-	public static final String DEMO_NAME = "Demo presentation";
-	public static final String DEFAULT_EXTENSION = ".xml";
+public interface Parser {
 
-	public static Accessor getDemoAccessor() {
-		return new DemoPresentation();
-	}
+    public void loadFile(Presentation p, String fn) throws IOException;
 
-	public Accessor() {
-	}
-
-	abstract public void loadFile(Presentation p, String fn) throws IOException;
-
-	abstract public void saveFile(Presentation p, String fn) throws IOException;
+    public void saveFile(Presentation p, String fn) throws IOException;
 
 }

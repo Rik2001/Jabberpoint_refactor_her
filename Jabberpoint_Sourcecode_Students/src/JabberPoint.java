@@ -23,15 +23,18 @@ public class JabberPoint {
 
 	/** The main program */
 	public static void main(String[] argv) {
-		
+
+		DemoPresentation demoPresentation = new DemoPresentation();
+
 		Style.createStyles();
 		Presentation presentation = new Presentation();
 		new SlideViewerFrame(JABVERSION, presentation);
 		try {
 			if (argv.length == 0) { //a demo presentation
-				Accessor.getDemoAccessor().loadFile(presentation, "");
+				demoPresentation.loadFile(presentation);
+				//Parser.getDemoAccessor().loadFile(presentation, "");
 			} else {
-				new XMLAccessor().loadFile(presentation, argv[0]);
+				new XMLParser().loadFile(presentation, argv[0]);
 			}
 			presentation.setSlideNumber(0);
 		} catch (IOException ex) {

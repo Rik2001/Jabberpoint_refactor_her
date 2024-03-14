@@ -54,9 +54,9 @@ public class MenuController extends MenuBar {
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				presentation.clear();
-				Accessor xmlAccessor = new XMLAccessor();
+				Parser xmlParser = new XMLParser();
 				try {
-					xmlAccessor.loadFile(presentation, TESTFILE);
+					xmlParser.loadFile(presentation, TESTFILE);
 					presentation.setSlideNumber(0);
 				} catch (IOException exc) {
 					JOptionPane.showMessageDialog(parent, IOEX + exc, 
@@ -75,9 +75,9 @@ public class MenuController extends MenuBar {
 		fileMenu.add(menuItem = mkMenuItem(SAVE));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Accessor xmlAccessor = new XMLAccessor();
+				Parser xmlParser = new XMLParser();
 				try {
-					xmlAccessor.saveFile(presentation, SAVEFILE);
+					xmlParser.saveFile(presentation, SAVEFILE);
 				} catch (IOException exc) {
 					JOptionPane.showMessageDialog(parent, IOEX + exc, 
 							SAVEERR, JOptionPane.ERROR_MESSAGE);
