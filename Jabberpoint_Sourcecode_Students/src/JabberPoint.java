@@ -32,9 +32,9 @@ public class JabberPoint {
 		new SlideViewerFrame(JABVERSION, presentation);
 		try {
 			if (argv.length == 0) { //a demo presentation
-				xmlParser.loadFile(presentation, DEMOPRESENTATION);
+				xmlParser.loadPresentation(presentation, DEMOPRESENTATION);
 			} else {
-				new XMLParser().loadFile(presentation, argv[0]);
+				new XMLParser().loadPresentation(presentation, argv[0]);
 			}
 			presentation.setSlideNumber(0);
 		} catch (IOException ex) {

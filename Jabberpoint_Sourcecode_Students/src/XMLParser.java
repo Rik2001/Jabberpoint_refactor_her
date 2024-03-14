@@ -44,38 +44,61 @@ public class XMLParser implements Parser {
     protected static final String PCE = "Parser Configuration Exception";
     protected static final String UNKNOWNTYPE = "Unknown Element type";
     protected static final String NFE = "Number Format Exception";
-    
-    
-    private String getTitle(Element element, String tagName) {
+
+	/**
+	 * gets the specified element
+	 * @param element File or element from which to read the tagName
+	 * @param tagName name of the xml-tag which has to be read
+	 * @return title name
+	 */
+	private String getTitle(Element element, String tagName) {
     	NodeList titles = element.getElementsByTagName(tagName);
     	return titles.item(0).getTextContent();
     	
     }
 
-	public void loadFile(Presentation presentation, String filename) throws IOException {
-		int slideNumber, itemNumber, max = 0, maxItems = 0;
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();    
-			Document document = builder.parse(new File(filename)); //Create a JDOM document
-			Element doc = document.getDocumentElement();
-			presentation.setTitle(getTitle(doc, SHOWTITLE));
+	/**
+	 * gets a list of elements
+	 * @param element element containing XML data from which to get all the tagNames
+	 * @param tagName name of the xml-tag which has to be read
+	 * @return a list of containing all tagName elements
+	 */
+	private NodeList getTagName(Element element, String tagName)
+	{
+		return element.getElementsByTagName(tagName);
+	}
 
-			NodeList slides = doc.getElementsByTagName(SLIDE);
-			max = slides.getLength();
-			for (slideNumber = 0; slideNumber < max; slideNumber++) {
-				Element xmlSlide = (Element) slides.item(slideNumber);
-				Slide slide = new Slide();
-				slide.setTitle(getTitle(xmlSlide, SLIDETITLE));
-				presentation.append(slide);
+	/**
+	 * load a Presentation from an XML file
+	 * @param presentation	instance of a presentation to which the XML presentation will be assigned
+	 * @param filename		namme of the XML-file which holds the presentation
+	 * @throws IOException
+	 */
+	public void loadPresentation(Presentation presentation, String filename) throws IOException {
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();    	//create documentBuilder
+			Document document = builder.parse(new File(filename)); //Create a JDOM document				//parse XML file into document variable
+			Element xmlPresentation = document.getDocumentElement();									//enter the presentation element
+
+			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to Presentation object
+
+			NodeList xmlSlides = getTagName(xmlPresentation, SLIDE);									//create a list of all the xmlSlide elements
+			for (int slideNumber = 0; slideNumber < xmlSlides.getLength(); slideNumber++) 					//loop through all different xmlSlides
+			{
+
+				Element xmlSlide = (Element) xmlSlides.item(slideNumber);								//get slide[slideNumber] from xmlSlides and convert to Element
+				Slide slide = new Slide();																//create a new slide
+				slide.setTitle(getTitle(xmlSlide, SLIDETITLE));											//get SlideTitle from XML-element and appoint title to slide
+				presentation.append(slide);																//append newly loaded slide to the presentation instance
 				
-				NodeList slideItems = xmlSlide.getElementsByTagName(ITEM);
-				maxItems = slideItems.getLength();
-				for (itemNumber = 0; itemNumber < maxItems; itemNumber++) {
-					Element item = (Element) slideItems.item(itemNumber);
-					loadSlideItem(slide, item);
-				}
-			}
-		} 
+				NodeList xmlSlideItems = getTagName(xmlSlide, ITEM);									//Load all xmlSlideItems from xmlSlide
+				for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)				//loop through all different xmlSlideItems from a Slide
+				{
+					Element xmlSlideItem = (Element) xmlSlideItems.item(itemNumber);					//get xmlSlideItem[x]
+					loadSlideItem(slide, xmlSlideItem);													//load slideItem
+				}																					//exit slidItem loop
+			}																					//exit slide loop
+		}
 		catch (IOException iox) {
 			System.err.println(iox.toString());
 		}
@@ -124,40 +147,54 @@ public class XMLParser implements Parser {
 		}
 	}
 
-	public void saveFile(Presentation presentation, String filename) throws IOException {
-		PrintWriter out = new PrintWriter(new FileWriter(filename));
-		out.println("<?xml version=\"1.0\"?>");
-		out.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
-		out.println("<presentation>");
-		out.print("<showtitle>");
-		out.print(presentation.getTitle());
-		out.println("</showtitle>");
-		for (int slideNumber=0; slideNumber<presentation.getSize(); slideNumber++) {
-			Slide slide = presentation.getSlide(slideNumber);
-			out.println("<slide>");
-			out.println("<title>" + slide.getTitle() + "</title>");
-			Vector<SlideItem> slideItems = slide.getSlideItems();
-			for (int itemNumber = 0; itemNumber<slideItems.size(); itemNumber++) {
-				SlideItem slideItem = (SlideItem) slideItems.elementAt(itemNumber);
-				out.print("<item kind="); 
-				if (slideItem instanceof TextItem) {
-					out.print("\"text\" level=\"" + slideItem.getLevel() + "\">");
-					out.print( ( (TextItem) slideItem).getText());
+	/**
+	 * save a presentation to a file
+	 * @param presentation	instance of the presentation that has to be saved
+	 * @param filename		name of the saveFile
+	 * @throws IOException
+	 */
+	public void savePresentation(Presentation presentation, String filename) throws IOException {
+		PrintWriter xmlSaveFile = new PrintWriter(new FileWriter(filename));						//create saveFile
+
+		xmlSaveFile.println("<?xml version=\"1.0\"?>");												//Add header element
+		xmlSaveFile.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
+
+		xmlSaveFile.println("<presentation>");														//Open Presentation encapsulation and end line
+		xmlSaveFile.println("<showtitle>" + presentation.getTitle() + "</showtitle>");				//add showTitle element to xml file
+
+		for (int slideNumber=0; slideNumber<presentation.getSize(); slideNumber++) {				//loop through all different slides
+
+			Slide slide = presentation.getSlide(slideNumber);										//get current slide
+			xmlSaveFile.println("<slide>");															//open Slide encapsulation and end line
+			xmlSaveFile.println("<title>" + slide.getTitle() + "</title>");							//add slide title element to xml file
+
+			for (int itemNumber = 0; itemNumber< slide.getSize(); itemNumber++) {					//loops through all the slideitems
+
+				SlideItem slideItem = slide.getSlideItem(itemNumber);								//gets current slideItem
+
+				xmlSaveFile.print("<item kind=");													//open slideItem encapsulation
+				if (slideItem instanceof TextItem)													//check if slideItem is a textItem
+				{
+					xmlSaveFile.print("\"text\" level=\"" + slideItem.getLevel() + "\">");			//add kind and level information
+					xmlSaveFile.print( ( (TextItem) slideItem).getText());							//add text from textitem within an item
 				}
-				else {
-					if (slideItem instanceof BitmapItem) {
-						out.print("\"image\" level=\"" + slideItem.getLevel() + "\">");
-						out.print( ( (BitmapItem) slideItem).getName());
-					}
-					else {
-						System.out.println("Ignoring " + slideItem);
-					}
+				else if (slideItem instanceof BitmapItem)											//check if instance is a BitmapItem
+				{
+					xmlSaveFile.print("\"image\" level=\"" + slideItem.getLevel() + "\">");			//add kind and level information
+					xmlSaveFile.print( ( (BitmapItem) slideItem).getName());						//add bitmapName within an item
 				}
-				out.println("</item>");
-			}
-			out.println("</slide>");
-		}
-		out.println("</presentation>");
-		out.close();
+				else																				//if item is neither a textitem or bitmapitem
+				{
+					System.out.println("Ignoring " + slideItem);
+				}
+
+				xmlSaveFile.println("</item>");														//close slideItem encapsulation
+			}																						//exit slideItem loop
+
+			xmlSaveFile.println("</slide>");														//close slide encapsulation
+		}																							//exit slide loop
+
+		xmlSaveFile.println("</presentation>");														//close presentation encapsulation
+		xmlSaveFile.close();																		//close xml file
 	}
 }

@@ -17,15 +17,15 @@ public class Slide {
 	public final static int WIDTH = 1200;
 	public final static int HEIGHT = 800;
 	protected String title; //The title is kept separately
-	protected Vector<SlideItem> items; //The SlideItems are kept in a vector
+	protected Vector<SlideItem> slideItems; //The SlideItems are kept in a vector
 
 	public Slide() {
-		items = new Vector<SlideItem>();
+		slideItems = new Vector<SlideItem>();
 	}
 
 	//Add a SlideItem
 	public void append(SlideItem anItem) {
-		items.addElement(anItem);
+		slideItems.addElement(anItem);
 	}
 
 	//Return the title of a slide
@@ -45,17 +45,20 @@ public class Slide {
 
 	//Returns the SlideItem
 	public SlideItem getSlideItem(int number) {
-		return (SlideItem)items.elementAt(number);
+		if (number < 0 || number >= getSize()){
+			return null;
+		}
+		return (SlideItem) slideItems.elementAt(number);
 	}
 
 	//Return all the SlideItems in a vector
 	public Vector<SlideItem> getSlideItems() {
-		return items;
+		return slideItems;
 	}
 
 	//Returns the size of a slide
 	public int getSize() {
-		return items.size();
+		return slideItems.size();
 	}
 
 	//Draws the slide

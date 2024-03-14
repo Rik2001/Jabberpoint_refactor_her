@@ -56,7 +56,7 @@ public class MenuController extends MenuBar {
 				presentation.clear();
 				Parser xmlParser = new XMLParser();
 				try {
-					xmlParser.loadFile(presentation, TESTFILE);
+					xmlParser.loadPresentation(presentation, TESTFILE);
 					presentation.setSlideNumber(0);
 				} catch (IOException exc) {
 					JOptionPane.showMessageDialog(parent, IOEX + exc, 
@@ -77,7 +77,7 @@ public class MenuController extends MenuBar {
 			public void actionPerformed(ActionEvent e) {
 				Parser xmlParser = new XMLParser();
 				try {
-					xmlParser.saveFile(presentation, SAVEFILE);
+					xmlParser.savePresentation(presentation, SAVEFILE);
 				} catch (IOException exc) {
 					JOptionPane.showMessageDialog(parent, IOEX + exc, 
 							SAVEERR, JOptionPane.ERROR_MESSAGE);
