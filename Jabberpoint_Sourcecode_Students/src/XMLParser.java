@@ -87,28 +87,39 @@ public class XMLParser implements Parser {
 		}	
 	}
 
-	protected void loadSlideItem(Slide slide, Element item) {
-		int level = 1; // default
-		NamedNodeMap attributes = item.getAttributes();
-		String leveltext = attributes.getNamedItem(LEVEL).getTextContent();
-		if (leveltext != null) {
-			try {
-				level = Integer.parseInt(leveltext);
+	/**
+	 * load slide xmlSlideitem of a slide
+	 * @param slide	The Slide to which the slideItem should be appended
+	 * @param xmlSlideitem	The slideItem which
+	 */
+	protected void loadSlideItem(Slide slide, Element xmlSlideitem) {
+		int level = 1;																		//default style level
+		NamedNodeMap attributes = xmlSlideitem.getAttributes();								//get different attributes from the xmlSlideItem
+		if(attributes != null)																//check if there are any attributes
+		{
+			String leveltext = attributes.getNamedItem(LEVEL).getTextContent();				//get level in string form
+			if (leveltext != null) {														//check if leveltext is available
+				try {
+					level = Integer.parseInt(leveltext);									//try to convert level to int
+				}
+				catch(NumberFormatException x) {
+					System.err.println(NFE);
+				}
 			}
-			catch(NumberFormatException x) {
-				System.err.println(NFE);
-			}
-		}
-		String type = attributes.getNamedItem(KIND).getTextContent();
-		if (TEXT.equals(type)) {
-			slide.append(new TextItem(level, item.getTextContent()));
-		}
-		else {
-			if (IMAGE.equals(type)) {
-				slide.append(new BitmapItem(level, item.getTextContent()));
-			}
-			else {
-				System.err.println(UNKNOWNTYPE);
+
+			String type = attributes.getNamedItem(KIND).getTextContent();					//get slideItem type
+			switch(type)																	//check on type
+			{
+				case TEXT:
+					slide.append(new TextItem(level, xmlSlideitem.getTextContent()));		//append TextItem to slide
+					break;
+
+				case IMAGE:
+					slide.append(new BitmapItem(level, xmlSlideitem.getTextContent()));		//append BitmapItem to slide
+					break;
+
+				default:
+					System.err.println(UNKNOWNTYPE);										//print unknown slideItem
 			}
 		}
 	}
