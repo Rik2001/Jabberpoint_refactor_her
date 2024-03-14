@@ -20,19 +20,19 @@ public class JabberPoint {
 	protected static final String IOERR = "IO Error: ";
 	protected static final String JABERR = "Jabberpoint Error ";
 	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
+	protected static final String DEMOPRESENTATION = "demoPresentation.xml";
 
 	/** The main program */
 	public static void main(String[] argv) {
 
-		DemoPresentation demoPresentation = new DemoPresentation();
+		XMLParser xmlParser = new XMLParser();
 
 		Style.createStyles();
 		Presentation presentation = new Presentation();
 		new SlideViewerFrame(JABVERSION, presentation);
 		try {
 			if (argv.length == 0) { //a demo presentation
-				demoPresentation.loadFile(presentation);
-				//Parser.getDemoAccessor().loadFile(presentation, "");
+				xmlParser.loadFile(presentation, DEMOPRESENTATION);
 			} else {
 				new XMLParser().loadFile(presentation, argv[0]);
 			}
