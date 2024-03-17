@@ -1,3 +1,5 @@
+package com.nhlstenden.Controller;
+
 import java.awt.MenuBar;
 import java.awt.Frame;
 import java.awt.Menu;
@@ -8,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
+
+import com.nhlstenden.Parser.*;
+import com.nhlstenden.Presentation.Presentation;
 
 /** <p>The controller for the menu</p>
  * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman

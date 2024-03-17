@@ -1,4 +1,5 @@
-import javax.management.ObjectInstance;
+package com.nhlstenden.Presentation;
+
 import java.awt.Color;
 import java.awt.Font;
 

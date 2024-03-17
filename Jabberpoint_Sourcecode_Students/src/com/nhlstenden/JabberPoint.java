@@ -1,6 +1,13 @@
+package com.nhlstenden;
+
+import com.nhlstenden.Parser.XMLParser;
+
 import javax.swing.JOptionPane;
 
 import java.io.IOException;
+
+import com.nhlstenden.Presentation.Presentation;
+import com.nhlstenden.Viewer.SlideViewerFrame;
 
 /** JabberPoint Main Program
  * <p>This program is distributed under the terms of the accompanying

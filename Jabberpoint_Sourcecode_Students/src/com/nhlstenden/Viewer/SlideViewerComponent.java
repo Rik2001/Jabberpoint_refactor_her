@@ -1,3 +1,8 @@
+package com.nhlstenden.Viewer;
+
+import com.nhlstenden.Presentation.Presentation;
+import com.nhlstenden.Presentation.Slide;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;

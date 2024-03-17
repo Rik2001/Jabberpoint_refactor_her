@@ -1,4 +1,5 @@
-import java.util.Vector;
+package com.nhlstenden.Parser;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
+
+import com.nhlstenden.Presentation.*;
 
 
 /** XMLAccessor, reads and writes XML files
@@ -69,7 +72,7 @@ public class XMLParser implements Parser {
 	}
 
 	/**
-	 * load a Presentation from an XML file
+	 * load a com.nhlstenden.Presentation from an XML file
 	 * @param presentation	instance of a presentation to which the XML presentation will be assigned
 	 * @param filename		namme of the XML-file which holds the presentation
 	 * @throws IOException
@@ -80,7 +83,7 @@ public class XMLParser implements Parser {
 			Document document = builder.parse(new File(filename)); //Create a JDOM document				//parse XML file into document variable
 			Element xmlPresentation = document.getDocumentElement();									//enter the presentation element
 
-			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to Presentation object
+			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to com.nhlstenden.Presentation object
 
 			NodeList xmlSlides = getTagName(xmlPresentation, SLIDE);									//create a list of all the xmlSlide elements
 			for (int slideNumber = 0; slideNumber < xmlSlides.getLength(); slideNumber++) 					//loop through all different xmlSlides
@@ -159,7 +162,7 @@ public class XMLParser implements Parser {
 		xmlSaveFile.println("<?xml version=\"1.0\"?>");												//Add header element
 		xmlSaveFile.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
 
-		xmlSaveFile.println("<presentation>");														//Open Presentation encapsulation and end line
+		xmlSaveFile.println("<presentation>");														//Open com.nhlstenden.Presentation encapsulation and end line
 		xmlSaveFile.println("<showtitle>" + presentation.getTitle() + "</showtitle>");				//add showTitle element to xml file
 
 		for (int slideNumber=0; slideNumber<presentation.getSize(); slideNumber++) {				//loop through all different slides

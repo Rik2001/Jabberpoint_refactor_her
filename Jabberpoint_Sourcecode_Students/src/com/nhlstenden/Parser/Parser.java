@@ -1,4 +1,8 @@
+package com.nhlstenden.Parser;
+
 import java.io.IOException;
+
+import com.nhlstenden.Presentation.Presentation;
 
 /**
  * <p>An Accessor makes it possible to read and write data

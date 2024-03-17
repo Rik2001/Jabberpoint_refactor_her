@@ -1,4 +1,8 @@
+package com.nhlstenden.Presentation;
+
 import java.util.ArrayList;
+
+import com.nhlstenden.Viewer.*;
 
 
 /**
@@ -73,7 +77,7 @@ public class Presentation {
 	}
 
 	//Remove the presentation
-	void clear() {
+	public void clear() {
 		showList = new ArrayList<Slide>();
 		setSlideNumber(-1);
 	}

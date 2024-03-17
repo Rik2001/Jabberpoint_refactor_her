@@ -1,5 +1,9 @@
+package com.nhlstenden.Controller;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+
+import com.nhlstenden.Presentation.*;
 
 /** <p>This is the KeyController (KeyListener)</p>
  * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman

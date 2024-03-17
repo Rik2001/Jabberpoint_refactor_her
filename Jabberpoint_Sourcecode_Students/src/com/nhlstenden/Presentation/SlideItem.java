@@ -1,3 +1,5 @@
+package com.nhlstenden.Presentation;
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.image.ImageObserver;
