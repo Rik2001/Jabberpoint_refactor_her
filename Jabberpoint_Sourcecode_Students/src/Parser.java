@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public interface Parser {
 
-    public void loadPresentation(Presentation p, String fn) throws IOException;
+    void loadPresentation(Presentation p, String fn) throws IOException;
 
-    public void savePresentation(Presentation p, String fn) throws IOException;
+    void savePresentation(Presentation p, String fn) throws IOException;
 
 }
