@@ -27,7 +27,6 @@ public class JabberPoint {
 
 		XMLParser xmlParser = new XMLParser();
 
-		Style.createStyles();
 		Presentation presentation = new Presentation();
 		new SlideViewerFrame(JABVERSION, presentation);
 		try {
