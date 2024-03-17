@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.nhlstenden.Viewer.*;
 
-
 /**
  * <p>Presentations keeps track of the slides in a presentation.</p>
  * <p>Only one instance of this class is available.</p>
@@ -37,6 +36,11 @@ public class Presentation {
 		return showList.size();
 	}
 
+	//Return the current slide
+	public Slide getCurrentSlide() {
+		return getSlide(currentSlideNumber);
+	}
+
 	public String getTitle() {
 		return showTitle;
 	}
@@ -56,9 +60,11 @@ public class Presentation {
 
 	//Change the current slide number and report it the the window
 	public void setSlideNumber(int number) {
-		currentSlideNumber = number;
-		if (slideViewComponent != null) {
-			slideViewComponent.update(this, getCurrentSlide());
+		if(number >= 0 && number < getSize()) {
+			currentSlideNumber = number;
+			if (slideViewComponent != null) {
+				slideViewComponent.update(this, getCurrentSlide());
+			}
 		}
 	}
 
@@ -83,7 +89,7 @@ public class Presentation {
 	}
 
 	//Add a slide to the presentation
-	public void append(Slide slide) {
+	public void appendSlide(Slide slide) {
 		showList.add(slide);
 	}
 
@@ -93,11 +99,6 @@ public class Presentation {
 			return null;
 	    }
 			return (Slide)showList.get(number);
-	}
-
-	//Return the current slide
-	public Slide getCurrentSlide() {
-		return getSlide(currentSlideNumber);
 	}
 
 	public void exit(int n) {

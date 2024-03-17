@@ -19,8 +19,8 @@ import com.nhlstenden.Presentation.Presentation;
 
 public interface Parser {
 
-    void loadPresentation(Presentation p, String fn) throws IOException;
+    void loadPresentation(Presentation presentation, String fileName) throws IOException;
 
-    void savePresentation(Presentation p, String fn) throws IOException;
+    void savePresentation(Presentation presentation, String fileName) throws IOException;
 
 }

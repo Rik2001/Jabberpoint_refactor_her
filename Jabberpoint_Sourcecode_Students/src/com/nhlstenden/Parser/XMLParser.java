@@ -74,13 +74,13 @@ public class XMLParser implements Parser {
 	/**
 	 * load a com.nhlstenden.Presentation from an XML file
 	 * @param presentation	instance of a presentation to which the XML presentation will be assigned
-	 * @param filename		namme of the XML-file which holds the presentation
+	 * @param fileName		namme of the XML-file which holds the presentation
 	 * @throws IOException
 	 */
-	public void loadPresentation(Presentation presentation, String filename) throws IOException {
+	public void loadPresentation(Presentation presentation, String fileName) throws IOException {
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();    	//create documentBuilder
-			Document document = builder.parse(new File(filename)); //Create a JDOM document				//parse XML file into document variable
+			Document document = builder.parse(new File(fileName)); //Create a JDOM document				//parse XML file into document variable
 			Element xmlPresentation = document.getDocumentElement();									//enter the presentation element
 
 			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to Presentation object
@@ -103,11 +103,16 @@ public class XMLParser implements Parser {
 		}	
 	}
 
-	public void loadSlide(Presentation presentation, Element xmlSlide)
+	/**
+	 * load a single Slide of a presentation
+	 * @param presentation from which to load a Slide
+	 * @param xmlSlide The slide that has to be converted into a Slide
+	 */
+	private void loadSlide(Presentation presentation, Element xmlSlide)
 	{
 		Slide slide = new Slide();																//create a new slide
 		slide.setTitle(getTitle(xmlSlide, SLIDETITLE));											//get SlideTitle from XML-element and appoint title to slide
-		presentation.append(slide);																//append newly loaded slide to the presentation instance
+		presentation.appendSlide(slide);																//append newly loaded slide to the presentation instance
 
 		NodeList xmlSlideItems = getTagName(xmlSlide, ITEM);									//Load all xmlSlideItems from xmlSlide
 		for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)				//loop through all different xmlSlideItems from a Slide
@@ -122,7 +127,7 @@ public class XMLParser implements Parser {
 	 * @param slide	The Slide to which the slideItem should be appended
 	 * @param xmlSlideitem	The slideItem which
 	 */
-	protected void loadSlideItem(Slide slide, Element xmlSlideitem) {
+	private void loadSlideItem(Slide slide, Element xmlSlideitem) {
 		int level = 1;																		//default style level
 		NamedNodeMap attributes = xmlSlideitem.getAttributes();								//get different attributes from the xmlSlideItem
 		if(attributes != null)																//check if there are any attributes
@@ -141,11 +146,11 @@ public class XMLParser implements Parser {
 			switch(type)																	//check on type
 			{
 				case TEXT:
-					slide.append(new TextItem(level, xmlSlideitem.getTextContent()));		//append TextItem to slide
+					slide.appendSlideItem(new TextItem(level, xmlSlideitem.getTextContent()));		//append TextItem to slide
 					break;
 
 				case IMAGE:
-					slide.append(new BitmapItem(level, xmlSlideitem.getTextContent()));		//append BitmapItem to slide
+					slide.appendSlideItem(new BitmapItem(level, xmlSlideitem.getTextContent()));		//append BitmapItem to slide
 					break;
 
 				default:
@@ -157,11 +162,11 @@ public class XMLParser implements Parser {
 	/**
 	 * save a presentation to a file
 	 * @param presentation	instance of the presentation that has to be saved
-	 * @param filename		name of the saveFile
+	 * @param fileName		name of the saveFile
 	 * @throws IOException
 	 */
-	public void savePresentation(Presentation presentation, String filename) throws IOException {
-		PrintWriter xmlSaveFile = new PrintWriter(new FileWriter(filename));						//create saveFile
+	public void savePresentation(Presentation presentation, String fileName) throws IOException {
+		PrintWriter xmlSaveFile = new PrintWriter(new FileWriter(fileName));						//create saveFile
 
 		xmlSaveFile.println("<?xml version=\"1.0\"?>");												//Add header element
 		xmlSaveFile.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");

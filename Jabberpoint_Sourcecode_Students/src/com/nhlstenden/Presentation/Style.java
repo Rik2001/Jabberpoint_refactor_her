@@ -51,11 +51,6 @@ public class Style {
 		//return requested level
 		return styles[level];
 	}
-
-	public String toString() {
-		return "["+ indent + "," + color + "; " + fontSize + " on " + leading +"]";
-	}
-
 	public int getIndent() {
 		return indent;
 	}
@@ -74,5 +69,8 @@ public class Style {
 
 	public int getLeading() {
 		return leading;
+	}
+	public String toString() {
+		return "["+ indent + "," + color + "; " + fontSize + " on " + leading +"]";
 	}
 }

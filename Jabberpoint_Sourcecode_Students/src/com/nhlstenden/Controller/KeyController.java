@@ -17,9 +17,8 @@ import com.nhlstenden.Presentation.*;
 
 public class KeyController extends KeyAdapter {
 	private Presentation presentation; //Commands are given to the presentation
-
-	public KeyController(Presentation p) {
-		presentation = p;
+	public KeyController(Presentation presentation) {
+		this.presentation = presentation;
 	}
 
 	public void keyPressed(KeyEvent keyEvent) {
