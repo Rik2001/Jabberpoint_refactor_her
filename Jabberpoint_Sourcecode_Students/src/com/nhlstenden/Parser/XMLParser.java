@@ -31,22 +31,22 @@ import com.nhlstenden.Presentation.*;
 public class XMLParser implements Parser {
 	
     /** Default API to use. */
-    protected static final String DEFAULT_API_TO_USE = "dom";
+    private static final String DEFAULT_API_TO_USE = "dom";
     
     /** Names of xml tags of attributes */
-    protected static final String SHOWTITLE = "showtitle";
-    protected static final String SLIDETITLE = "title";
-    protected static final String SLIDE = "slide";
-    protected static final String ITEM = "item";
-    protected static final String LEVEL = "level";
-    protected static final String KIND = "kind";
-    protected static final String TEXT = "text";
-    protected static final String IMAGE = "image";
+	private static final String SHOWTITLE = "showtitle";
+	private static final String SLIDETITLE = "title";
+	private static final String SLIDE = "slide";
+	private static final String ITEM = "item";
+	private static final String LEVEL = "level";
+	private static final String KIND = "kind";
+	private static final String TEXT = "text";
+	private static final String IMAGE = "image";
     
     /** Text of messages */
-    protected static final String PCE = "Parser Configuration Exception";
-    protected static final String UNKNOWNTYPE = "Unknown Element type";
-    protected static final String NFE = "Number Format Exception";
+	private static final String PCE = "Parser Configuration Exception";
+	private static final String UNKNOWNTYPE = "Unknown Element type";
+	private static final String NFE = "Number Format Exception";
 
 	/**
 	 * gets the specified element
@@ -83,23 +83,13 @@ public class XMLParser implements Parser {
 			Document document = builder.parse(new File(filename)); //Create a JDOM document				//parse XML file into document variable
 			Element xmlPresentation = document.getDocumentElement();									//enter the presentation element
 
-			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to com.nhlstenden.Presentation object
+			presentation.setTitle(getTitle(xmlPresentation, SHOWTITLE));								//get presentation title from XML file and append to Presentation object
 
 			NodeList xmlSlides = getTagName(xmlPresentation, SLIDE);									//create a list of all the xmlSlide elements
 			for (int slideNumber = 0; slideNumber < xmlSlides.getLength(); slideNumber++) 					//loop through all different xmlSlides
 			{
-
 				Element xmlSlide = (Element) xmlSlides.item(slideNumber);								//get slide[slideNumber] from xmlSlides and convert to Element
-				Slide slide = new Slide();																//create a new slide
-				slide.setTitle(getTitle(xmlSlide, SLIDETITLE));											//get SlideTitle from XML-element and appoint title to slide
-				presentation.append(slide);																//append newly loaded slide to the presentation instance
-				
-				NodeList xmlSlideItems = getTagName(xmlSlide, ITEM);									//Load all xmlSlideItems from xmlSlide
-				for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)				//loop through all different xmlSlideItems from a Slide
-				{
-					Element xmlSlideItem = (Element) xmlSlideItems.item(itemNumber);					//get xmlSlideItem[x]
-					loadSlideItem(slide, xmlSlideItem);													//load slideItem
-				}																					//exit slidItem loop
+				loadSlide(presentation, xmlSlide);														//load a slide
 			}																					//exit slide loop
 		}
 		catch (IOException iox) {
@@ -111,6 +101,20 @@ public class XMLParser implements Parser {
 		catch (ParserConfigurationException pcx) {
 			System.err.println(PCE);
 		}	
+	}
+
+	public void loadSlide(Presentation presentation, Element xmlSlide)
+	{
+		Slide slide = new Slide();																//create a new slide
+		slide.setTitle(getTitle(xmlSlide, SLIDETITLE));											//get SlideTitle from XML-element and appoint title to slide
+		presentation.append(slide);																//append newly loaded slide to the presentation instance
+
+		NodeList xmlSlideItems = getTagName(xmlSlide, ITEM);									//Load all xmlSlideItems from xmlSlide
+		for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)				//loop through all different xmlSlideItems from a Slide
+		{
+			Element xmlSlideItem = (Element) xmlSlideItems.item(itemNumber);					//get xmlSlideItem[x]
+			loadSlideItem(slide, xmlSlideItem);													//load slideItem
+		}																					//exit slidItem loop
 	}
 
 	/**
