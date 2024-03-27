@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 
 import com.nhlstenden.Presentation.*;
+import com.nhlstenden.Viewer.Events;
+import com.nhlstenden.Viewer.Mediator;
 
 /** <p>This is the KeyController (KeyListener)</p>
  * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
@@ -16,9 +18,10 @@ import com.nhlstenden.Presentation.*;
 */
 
 public class KeyController extends KeyAdapter {
+	private Mediator mediator;
 	private Presentation presentation; //Commands are given to the presentation
-	public KeyController(Presentation presentation) {
-		this.presentation = presentation;
+	public KeyController(Mediator mediator) {
+		this.mediator = mediator;
 	}
 
 	public void keyPressed(KeyEvent keyEvent) {
@@ -27,12 +30,12 @@ public class KeyController extends KeyAdapter {
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_ENTER:
 			case '+':
-				presentation.nextSlide();
+				mediator.update(Events.NEXT_SLIDE, 0);
 				break;
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_UP:
 			case '-':
-				presentation.prevSlide();
+				mediator.update(Events.PREV_SLIDE, 0);
 				break;
 			case 'q':
 			case 'Q':

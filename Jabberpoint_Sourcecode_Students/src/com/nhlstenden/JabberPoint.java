@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import java.io.IOException;
 
 import com.nhlstenden.Presentation.Presentation;
+import com.nhlstenden.Viewer.Mediator;
 import com.nhlstenden.Viewer.SlideViewerFrame;
 
 /** JabberPoint Main Program
@@ -33,20 +34,14 @@ public class JabberPoint {
 	public static void main(String[] argv) {
 
 		XMLParser xmlParser = new XMLParser();
+		Presentation presentation;
 
-		Presentation presentation = new Presentation();
+        if (argv.length == 0) { //a demo presentation
+            presentation = xmlParser.loadPresentation(DEMOPRESENTATION);
+        } else {
+            presentation = xmlParser.loadPresentation(argv[0]);
+        }
+
 		new SlideViewerFrame(JABVERSION, presentation);
-		try {
-			if (argv.length == 0) { //a demo presentation
-				xmlParser.loadPresentation(presentation, DEMOPRESENTATION);
-			} else {
-				new XMLParser().loadPresentation(presentation, argv[0]);
-			}
-			presentation.setSlideNumber(0);
-		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(null,
-					IOERR + ex, JABERR,
-					JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }

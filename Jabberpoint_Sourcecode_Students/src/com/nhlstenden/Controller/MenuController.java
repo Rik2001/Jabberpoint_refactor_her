@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 
 import com.nhlstenden.Parser.*;
 import com.nhlstenden.Presentation.Presentation;
+import com.nhlstenden.Viewer.Events;
+import com.nhlstenden.Viewer.Mediator;
 
 /** <p>The controller for the menu</p>
  * @author Ian F. Darwin, ian@darwinsys.com, Gert Florijn, Sylvia Stuurman
@@ -24,10 +26,9 @@ import com.nhlstenden.Presentation.Presentation;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 public class MenuController extends MenuBar {
-	
 	private Frame parent; //The frame, only used as parent for the Dialogs
-	private Presentation presentation; //Commands are given to the presentation
 	private static final long serialVersionUID = 227L;
+	private Mediator mediator;
 	private static final String ABOUT = "About";
 	private static final String FILE = "File";
 	private static final String EXIT = "Exit";
@@ -42,55 +43,38 @@ public class MenuController extends MenuBar {
 	private static final String VIEW = "View";
 	private static final String TESTFILE = "testPresentation.xml";
 	private static final String SAVEFILE = "savedPresentation.xml";
-
 	private static final String IOEX = "IO Exception: ";
 	private static final String LOADERR = "Load Error";
 	private static final String SAVEERR = "Save Error";
 
-	public MenuController(Frame frame, Presentation presentation) {
+	public MenuController(Frame frame,Mediator mediator) {
 		parent = frame;
-		this.presentation = presentation;
+		this.mediator = mediator;
 		MenuItem menuItem;
 		Menu fileMenu = new Menu(FILE);
 		fileMenu.add(menuItem = mkMenuItem(OPEN));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				MenuController.this.presentation.clear();
-				Parser xmlParser = new XMLParser();
-				try {
-					xmlParser.loadPresentation(MenuController.this.presentation, TESTFILE);
-					MenuController.this.presentation.setSlideNumber(0);
-				} catch (IOException exc) {
-					JOptionPane.showMessageDialog(parent, IOEX + exc, 
-         			LOADERR, JOptionPane.ERROR_MESSAGE);
-				}
-				parent.repaint();
+                mediator.update(Events.OPEN, 0);
 			}
 		} );
 		fileMenu.add(menuItem = mkMenuItem(NEW));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				MenuController.this.presentation.clear();
-				parent.repaint();
+				mediator.update(Events.NEW, 0);
 			}
 		});
 		fileMenu.add(menuItem = mkMenuItem(SAVE));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Parser xmlParser = new XMLParser();
-				try {
-					xmlParser.savePresentation(MenuController.this.presentation, SAVEFILE);
-				} catch (IOException exc) {
-					JOptionPane.showMessageDialog(parent, IOEX + exc, 
-							SAVEERR, JOptionPane.ERROR_MESSAGE);
-				}
+				mediator.update(Events.SAVE, 0);
 			}
 		});
 		fileMenu.addSeparator();
 		fileMenu.add(menuItem = mkMenuItem(EXIT));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				MenuController.this.presentation.exit(0);
+				mediator.update(Events.EXIT, 0);
 			}
 		});
 		add(fileMenu);
@@ -98,13 +82,13 @@ public class MenuController extends MenuBar {
 		viewMenu.add(menuItem = mkMenuItem(NEXT));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				MenuController.this.presentation.nextSlide();
+				mediator.update(Events.NEXT_SLIDE, 0);
 			}
 		});
 		viewMenu.add(menuItem = mkMenuItem(PREV));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				MenuController.this.presentation.prevSlide();
+				mediator.update(Events.PREV_SLIDE, 0);
 			}
 		});
 		viewMenu.add(menuItem = mkMenuItem(GOTO));
@@ -112,7 +96,7 @@ public class MenuController extends MenuBar {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String pageNumberStr = JOptionPane.showInputDialog((Object)PAGENR);
 				int pageNumber = Integer.parseInt(pageNumberStr);
-				MenuController.this.presentation.setSlideNumber(pageNumber - 1);
+				mediator.update(Events.GOTO, pageNumber);
 			}
 		});
 		add(viewMenu);

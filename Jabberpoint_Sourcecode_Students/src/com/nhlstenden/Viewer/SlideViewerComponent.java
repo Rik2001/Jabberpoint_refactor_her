@@ -1,5 +1,6 @@
 package com.nhlstenden.Viewer;
 
+import com.nhlstenden.Parser.XMLParser;
 import com.nhlstenden.Presentation.Presentation;
 import com.nhlstenden.Presentation.Slide;
 
@@ -8,6 +9,7 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -22,7 +24,7 @@ import javax.swing.JFrame;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public class SlideViewerComponent extends JComponent{
+public class SlideViewerComponent extends JComponent implements Mediator{
 		
 	private Slide slide; //The current slide
 	private Font labelFont = null; //The font for labels
@@ -38,6 +40,8 @@ public class SlideViewerComponent extends JComponent{
 	private static final int YPOS = 20;
 	private final static int WIDTH = 1200;
 	private final static int HEIGHT = 800;
+	private static final String TESTFILE = "testPresentation.xml";
+	private static final String SAVEFILE = "savedPresentation.xml";
 
 	public SlideViewerComponent(Presentation presentation, JFrame frame) {
 		setBackground(BGCOLOR); 
@@ -46,13 +50,39 @@ public class SlideViewerComponent extends JComponent{
 		this.frame = frame;
 	}
 
-	public void update(Presentation presentation, Slide data) {
-		if (data == null) {
-			repaint();
-			return;
+	@Override
+	public void update(Events event, int value) {
+		XMLParser xmlParser = new XMLParser();
+		switch (event)
+		{
+			case GOTO:
+				this.presentation.setSlideNumber(value - 1);
+				break;
+			case OPEN:
+				this.presentation = xmlParser.loadPresentation(TESTFILE);
+				break;
+			case SAVE:
+				xmlParser.savePresentation(this.presentation, SAVEFILE);
+				break;
+			case NEXT_SLIDE:
+				this.presentation.nextSlide();
+				break;
+			case PREV_SLIDE:
+				this.presentation.prevSlide();
+				break;
+			case NEW:
+				this.presentation.clear();
+				break;
+			case EXIT:
+				System.exit(0);
+				break;
+			case CREATE:
+				break;
+			default:
+
+				break;
 		}
-		this.presentation = presentation;
-		this.slide = data;
+		this.slide = presentation.getCurrentSlide();
 		repaint();
 		frame.setTitle(presentation.getTitle());
 	}

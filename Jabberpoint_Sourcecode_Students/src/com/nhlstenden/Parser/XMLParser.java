@@ -73,11 +73,12 @@ public class XMLParser implements Parser {
 
 	/**
 	 * load a com.nhlstenden.Presentation from an XML file
-	 * @param presentation	instance of a presentation to which the XML presentation will be assigned
 	 * @param fileName		namme of the XML-file which holds the presentation
 	 * @throws IOException
 	 */
-	public void loadPresentation(Presentation presentation, String fileName) throws IOException {
+
+	public Presentation loadPresentation(String fileName){
+		Presentation presentation = new Presentation();
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();    	//create documentBuilder
 			Document document = builder.parse(new File(fileName)); //Create a JDOM document				//parse XML file into document variable
@@ -100,7 +101,8 @@ public class XMLParser implements Parser {
 		}
 		catch (ParserConfigurationException pcx) {
 			System.err.println(PCE);
-		}	
+		}
+		return presentation;
 	}
 
 	/**
@@ -163,12 +165,16 @@ public class XMLParser implements Parser {
 	 * save a presentation to a file
 	 * @param presentation	instance of the presentation that has to be saved
 	 * @param fileName		name of the saveFile
-	 * @throws IOException
 	 */
-	public void savePresentation(Presentation presentation, String fileName) throws IOException {
-		PrintWriter xmlSaveFile = new PrintWriter(new FileWriter(fileName));						//create saveFile
+	public void savePresentation(Presentation presentation, String fileName) {
+        PrintWriter xmlSaveFile = null;																//create saveFile
+        try {
+            xmlSaveFile = new PrintWriter(new FileWriter(fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-		xmlSaveFile.println("<?xml version=\"1.0\"?>");												//Add header element
+        xmlSaveFile.println("<?xml version=\"1.0\"?>");												//Add header element
 		xmlSaveFile.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
 
 		xmlSaveFile.println("<presentation>");														//Open com.nhlstenden.Presentation encapsulation and end line
