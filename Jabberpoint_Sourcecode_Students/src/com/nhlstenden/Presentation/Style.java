@@ -44,10 +44,6 @@ public class Style {
 			styles[3] = new Style(70, Color.black, 30, 10);	// style voor item-level 3
 			styles[4] = new Style(90, Color.black, 24, 10);	// style voor item-level 4
 		}
-		//check if level exists
-		if (level >= styles.length) {
-			level = styles.length - 1;
-		}
 		//return requested level
 		return styles[level];
 	}

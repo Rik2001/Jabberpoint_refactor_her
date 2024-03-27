@@ -25,20 +25,19 @@ public class Slide {
 		slideItems = new Vector<SlideItem>();
 	}
 
-	//Draws the slide
+	//Draws the slide on a Jcomponent
 	public void draw(Graphics graphics, Rectangle area, ImageObserver view) {
 		float scale = getScale(area);
 		int y = area.y;
-		//The title is treated separately
-		SlideItem slideItem = new TextItem(0, getTitle());
-		Style style = Style.getInstance(slideItem.getLevel());
-		slideItem.draw(area.x, y, scale, graphics, style, view);
-		y += slideItem.getBoundingBox(graphics, view, scale, style).height;
-		for (int number=0; number<getSize(); number++) {
-			slideItem = getSlideItem(number);
-			style = Style.getInstance(slideItem.getLevel());
-			slideItem.draw(area.x, y, scale, graphics, style, view);
-			y += slideItem.getBoundingBox(graphics, view, scale, style).height;
+
+		//Draw the Slide Title
+		SlideItem slideItem = new TextItem(0, getTitle());							//Create new SlideItem for slide title
+		slideItem.draw(area.x, y, scale, graphics, view);								//Draw Title
+
+		for (int slideItemIndex = 0; slideItemIndex < getSize(); slideItemIndex++) {
+			y = y + slideItem.getBoundingBox(graphics, view, scale).height;				//Calculate new Y-axis height
+			slideItem = getSlideItem(slideItemIndex);									//Get new SlideItem
+			slideItem.draw(area.x, y, scale, graphics, view);							//draw the SlideItem
 		}
 	}
 

@@ -17,7 +17,6 @@ import java.awt.image.ImageObserver;
 
 public abstract class SlideItem {
 	private int level; //The level of the SlideItem
-
 	public SlideItem(int level) {
 		this.level = level;
 	}
@@ -27,9 +26,15 @@ public abstract class SlideItem {
 		return level;
 	}
 
-//Returns the bounding box
-	public abstract Rectangle getBoundingBox(Graphics graphics, ImageObserver observer, float scale, Style style);
+	/**
+	 * returns the area of a SlideItem
+	 * @param graphics graphics
+	 * @param observer for working with images
+	 * @param scale the scale of the jabberpoint slide
+	 * @return Rectangle with area of the slide
+	 */
+	public abstract Rectangle getBoundingBox(Graphics graphics, ImageObserver observer, float scale);
 
 //Draws the item
-	public abstract void draw(int x, int y, float scale, Graphics graphics, Style style, ImageObserver observer);
+	public abstract void draw(int x, int y, float scale, Graphics graphics, ImageObserver observer);
 }

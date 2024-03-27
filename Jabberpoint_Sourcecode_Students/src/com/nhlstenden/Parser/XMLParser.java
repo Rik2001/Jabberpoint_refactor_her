@@ -112,14 +112,14 @@ public class XMLParser implements Parser {
 	{
 		Slide slide = new Slide();																//create a new slide
 		slide.setTitle(getTitle(xmlSlide, SLIDETITLE));											//get SlideTitle from XML-element and appoint title to slide
-		presentation.appendSlide(slide);																//append newly loaded slide to the presentation instance
+		presentation.appendSlide(slide);														//append newly loaded slide to the presentation instance
 
 		NodeList xmlSlideItems = getTagName(xmlSlide, ITEM);									//Load all xmlSlideItems from xmlSlide
-		for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)				//loop through all different xmlSlideItems from a Slide
+		for (int itemNumber = 0; itemNumber < xmlSlideItems.getLength(); itemNumber++)			//loop through all different xmlSlideItems from a Slide
 		{
 			Element xmlSlideItem = (Element) xmlSlideItems.item(itemNumber);					//get xmlSlideItem[x]
 			loadSlideItem(slide, xmlSlideItem);													//load slideItem
-		}																					//exit slidItem loop
+		}																						//exit slidItem loop
 	}
 
 	/**
