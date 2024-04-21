@@ -6,10 +6,8 @@ import com.nhlstenden.Presentation.Slide;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -27,9 +25,9 @@ import javax.swing.JFrame;
 public class SlideViewerComponent extends JComponent implements Mediator{
 		
 	private Slide slide; //The current slide
-	private Font labelFont = null; //The font for labels
-	private Presentation presentation = null; //The presentation
-	private JFrame frame = null;
+	private Font labelFont; //The font for labels
+	private Presentation presentation; //The one and only presentation
+	private final JFrame frame; //parent of this slideViewerComponent
 	private static final long serialVersionUID = 227L;
 	private static final Color BGCOLOR = Color.white;
 	private static final Color COLOR = Color.black;
@@ -38,8 +36,6 @@ public class SlideViewerComponent extends JComponent implements Mediator{
 	private static final int FONTHEIGHT = 10;
 	private static final int XPOS = 1100;
 	private static final int YPOS = 20;
-	private final static int WIDTH = 1200;
-	private final static int HEIGHT = 800;
 	private static final String TESTFILE = "testPresentation.xml";
 	private static final String SAVEFILE = "savedPresentation.xml";
 
@@ -50,44 +46,63 @@ public class SlideViewerComponent extends JComponent implements Mediator{
 		this.frame = frame;
 	}
 
+	/**
+	 * events which can be called to manipulate the Pressentation instance
+	 * @param event event type which has been called
+	 * @param value a value which belongs to the event and is necessary to execute the event
+	 */
 	@Override
 	public void update(Events event, int value) {
+		//TODO: Think of way to change int value to something more generally usable
 		XMLParser xmlParser = new XMLParser();
 		switch (event)
 		{
 			case GOTO:
 				this.presentation.setSlideNumber(value - 1);
+				updateSlideViewerComponent();
 				break;
 			case OPEN:
 				this.presentation = xmlParser.loadPresentation(TESTFILE);
+				updateSlideViewerComponent();
 				break;
 			case SAVE:
 				xmlParser.savePresentation(this.presentation, SAVEFILE);
 				break;
 			case NEXT_SLIDE:
 				this.presentation.nextSlide();
+				updateSlideViewerComponent();
 				break;
 			case PREV_SLIDE:
 				this.presentation.prevSlide();
+				updateSlideViewerComponent();
 				break;
 			case NEW:
-				this.presentation.clear();
+				this.presentation = new Presentation();
+				updateSlideViewerComponent();
 				break;
 			case EXIT:
 				System.exit(0);
 				break;
 			case CREATE:
-				break;
-			default:
-
+				updateSlideViewerComponent();
 				break;
 		}
+	}
+
+	/**
+	 * function to draw the current Slide again
+	 */
+	private void updateSlideViewerComponent()
+	{
 		this.slide = presentation.getCurrentSlide();
 		repaint();
 		frame.setTitle(presentation.getTitle());
 	}
 
-//Draw the slide
+	/**
+	 * draw the current slide
+	 * @param graphics the <code>Graphics</code> object to protect
+	 */
 	public void paintComponent(Graphics graphics) {
 		graphics.setColor(BGCOLOR);
 		graphics.fillRect(0, 0, getSize().width, getSize().height);
@@ -100,9 +115,5 @@ public class SlideViewerComponent extends JComponent implements Mediator{
                  presentation.getSize(), XPOS, YPOS);
 		Rectangle area = new Rectangle(0, YPOS, getWidth(), (getHeight() - YPOS));
 		slide.draw(graphics, area, this);
-	}
-
-	public Dimension getPreferredSize() {
-		return new Dimension(WIDTH, HEIGHT);
 	}
 }

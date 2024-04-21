@@ -34,7 +34,10 @@ public class SlideViewerFrame extends JFrame {
 		slideViewerComponent.update(Events.CREATE, 0);
 	}
 
-//Setup the GUI
+	/**
+	 * set up the GUI
+	 * @param slideViewerComponent component which has the presentation instance
+	 */
 	public void setupWindow(SlideViewerComponent slideViewerComponent) {
 		setTitle(JABTITLE);
 		addWindowListener(new WindowAdapter() {
@@ -47,5 +50,16 @@ public class SlideViewerFrame extends JFrame {
 		setMenuBar(new MenuController(this, slideViewerComponent));	//Add another controller
 		setSize(new Dimension(WIDTH, HEIGHT)); //Same sizes a slide has
 		setVisible(true);
+	}
+	public Dimension getPreferredSize() {
+		return new Dimension(WIDTH, HEIGHT);
+	}
+	public static int getPreferredWidth()
+	{
+		return WIDTH;
+	}
+	public static int getPreferredHeight()
+	{
+		return HEIGHT;
 	}
 }

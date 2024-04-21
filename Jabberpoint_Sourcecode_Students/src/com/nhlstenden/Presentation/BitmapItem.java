@@ -24,24 +24,31 @@ import java.io.IOException;
 
 public class BitmapItem extends SlideItem {
   	private BufferedImage bufferedImage;
-  	private String imageName;
-  	private static final String FILE = "File ";
-  	private static final String NOTFOUND = " not found";
+  	private final String imageName;
 
-
-  	//level indicates the item-level; name indicates the name of the file with the image
+	/**
+	 * Image item which can be appended to a Slide
+	 * @param level	indicates the item-level
+	 * @param name	indicates the name of the file with the image
+	 */
 	public BitmapItem(int level, String name) {
 		super(level);
-		imageName = name;
+		this.imageName = name;
 		try {
 			bufferedImage = ImageIO.read(new File(imageName));
 		}
 		catch (IOException e) {
-			System.err.println(FILE + imageName + NOTFOUND) ;
+			System.err.println("File: " + imageName + " not found") ;
 		}
 	}
 
-	//Returns the bounding box of the image
+	/**
+	 * Calculates the boundingbox of the bitmapItem
+	 * @param graphics graphics
+	 * @param observer for working with images
+	 * @param scale the scale of the jabberpoint slide
+	 * @return	the bounding box of the image
+	 */
 	public Rectangle getBoundingBox(Graphics graphics, ImageObserver observer, float scale) {
 		Style style = Style.getInstance(this.getLevel());
 		return new Rectangle((int) (style.getIndent() * scale), 0,

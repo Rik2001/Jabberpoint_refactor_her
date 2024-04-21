@@ -1,5 +1,7 @@
 package com.nhlstenden.Presentation;
 
+import com.nhlstenden.Viewer.SlideViewerFrame;
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,7 +14,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
 import java.text.AttributedString;
 import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 
 /** <p>A text item.</p>
@@ -27,9 +28,7 @@ import java.util.ArrayList;
  */
 
 public class TextItem extends SlideItem {
-	private String text;
-	private final static int WIDTH = 1200;
-	private final static int HEIGHT = 800;
+	private final String text;
 
 	/**
 	 * Constructor of a TextItem
@@ -38,7 +37,7 @@ public class TextItem extends SlideItem {
 	 */
 	public TextItem(int level, String string) {
 		super(level);
-		text = string;
+		this.text = string;
 	}
 
 	/**
@@ -95,13 +94,13 @@ public class TextItem extends SlideItem {
 
 	private List<TextLayout> getLayouts(Graphics graphics, float scale) {
 		Style style = Style.getInstance(this.getLevel());
-		List<TextLayout> layouts = new ArrayList<TextLayout>();
+		List<TextLayout> layouts = new ArrayList<>();
 		AttributedString attrStr = getAttributedString(scale);
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		FontRenderContext fontRenderContext = graphics2D.getFontRenderContext();
 		LineBreakMeasurer measurer = new LineBreakMeasurer(attrStr.getIterator(), fontRenderContext);
 
-		float wrappingWidth = (WIDTH - style.getIndent()) * scale;
+		float wrappingWidth = (SlideViewerFrame.getPreferredWidth() - style.getIndent()) * scale;
 		while (measurer.getPosition() < getText().length()) {
 			TextLayout layout = measurer.nextLayout(wrappingWidth);
 			layouts.add(layout);

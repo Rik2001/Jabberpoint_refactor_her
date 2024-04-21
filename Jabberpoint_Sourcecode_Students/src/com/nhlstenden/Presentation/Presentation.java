@@ -1,8 +1,7 @@
 package com.nhlstenden.Presentation;
 
+import javax.swing.*;
 import java.util.ArrayList;
-
-import com.nhlstenden.Viewer.*;
 
 /**
  * <p>Presentations keeps track of the slides in a presentation.</p>
@@ -18,15 +17,30 @@ import com.nhlstenden.Viewer.*;
 
 public class Presentation {
 	private String showTitle; //The title of the presentation
-	private ArrayList<Slide> showList = null; //An ArrayList with slides
-	private int currentSlideNumber = 0; //The number of the current slide
+	private ArrayList<Slide> slides; //An ArrayList with slides
+	private int currentSlideNumber; //The number of the current slide
 
 	public Presentation() {
-		clear();
+		this.slides = new ArrayList<>();
+		this.currentSlideNumber = 0;
+	}
+
+	//Navigate to the previous slide unless we are at the first slide
+	public void prevSlide() {
+		if (currentSlideNumber > 0) {
+			setSlideNumber(currentSlideNumber - 1);
+		}
+	}
+
+	//Navigate to the next slide unless we are at the last slide
+	public void nextSlide() {
+		if (currentSlideNumber < (slides.size()-1)) {
+			setSlideNumber(currentSlideNumber + 1);
+		}
 	}
 
 	public int getSize() {
-		return showList.size();
+		return slides.size();
 	}
 
 	//Return the current slide
@@ -47,36 +61,19 @@ public class Presentation {
 		return currentSlideNumber;
 	}
 
-	//Change the current slide number and report it the the window
+	//Change the current slide number and report it the window
 	public void setSlideNumber(int number) {
-		if(number >= 0 && number < getSize()) {
+		if(number >= 0 && number < slides.size()) {
 			currentSlideNumber = number;
+		}else{
+			JOptionPane.showMessageDialog(new JFrame(),"Slide " + (number + 1) + " is out of range: 1 - "
+					+ slides.size() + " and doesn't exist!");
 		}
-	}
-
-	//Navigate to the previous slide unless we are at the first slide
-	public void prevSlide() {
-		if (currentSlideNumber > 0) {
-			setSlideNumber(currentSlideNumber - 1);
-	    }
-	}
-
-	//Navigate to the next slide unless we are at the last slide
-	public void nextSlide() {
-		if (currentSlideNumber < (showList.size()-1)) {
-			setSlideNumber(currentSlideNumber + 1);
-		}
-	}
-
-	//Remove the presentation
-	public void clear() {
-		showList = new ArrayList<Slide>();
-		setSlideNumber(-1);
 	}
 
 	//Add a slide to the presentation
 	public void appendSlide(Slide slide) {
-		showList.add(slide);
+		slides.add(slide);
 	}
 
 	//Return a slide with a specific number
@@ -84,10 +81,6 @@ public class Presentation {
 		if (number < 0 || number >= getSize()){
 			return null;
 	    }
-			return (Slide)showList.get(number);
-	}
-
-	public void exit(int n) {
-		System.exit(n);
+			return slides.get(number);
 	}
 }

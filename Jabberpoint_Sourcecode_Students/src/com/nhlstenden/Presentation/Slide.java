@@ -1,5 +1,7 @@
 package com.nhlstenden.Presentation;
 
+import com.nhlstenden.Viewer.SlideViewerFrame;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
@@ -16,13 +18,11 @@ import java.util.Vector;
  */
 
 public class Slide {
-	private final static int WIDTH = 1200;
-	private final static int HEIGHT = 800;
 	private String title; //The title is kept separately
 	private Vector<SlideItem> slideItems; //The SlideItems are kept in a vector
 
 	public Slide() {
-		slideItems = new Vector<SlideItem>();
+		slideItems = new Vector<>();
 	}
 
 	//Draws the slide on a Jcomponent
@@ -43,17 +43,13 @@ public class Slide {
 
 	//Returns the scale to draw a slide
 	private float getScale(Rectangle area) {
-		return Math.min(((float)area.width) / ((float)WIDTH), ((float)area.height) / ((float)HEIGHT));
+		return Math.min(((float)area.width) / ((float) SlideViewerFrame.getPreferredWidth()),
+				((float)area.height) / ((float) SlideViewerFrame.getPreferredHeight()));
 	}
 
 	//Add a SlideItem
 	public void appendSlideItem(SlideItem slideItem) {
 		slideItems.addElement(slideItem);
-	}
-
-	public void removeSlidItem(SlideItem slideItem)
-	{
-		slideItems.remove(slideItem);
 	}
 
 	//Return the title of a slide
@@ -74,19 +70,8 @@ public class Slide {
 		return slideItems.elementAt(number);
 	}
 
-	//Return all the SlideItems in a vector
-	public Vector<SlideItem> getSlideItems() {
-		return slideItems;
-	}
-
 	//Returns the size of a slide
 	public int getSize() {
 		return slideItems.size();
-	}
-	public int getWidth(){
-		return WIDTH;
-	}
-	public int getHeight(){
-		return HEIGHT;
 	}
 }

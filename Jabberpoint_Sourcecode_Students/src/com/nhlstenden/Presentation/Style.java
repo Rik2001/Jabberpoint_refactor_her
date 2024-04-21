@@ -17,27 +17,39 @@ import java.awt.Font;
  */
 
 public class Style {
-	private static Style[] styles; // de styles
+	private static Style[] styles; //All of the styles needed in this program
 	private static final String FONTNAME = "Helvetica";
-	private int indent;
-	private Color color;
-	private Font font;
-	private int fontSize;
-	private int leading;
+	private final int indent;
+	private final Color color;
+	private final Font font;
+	private final int fontSize;
+	private final int leading;
 
+	/**
+	 * constructor is private as to make Class singleton
+	 * @param indent	the indent in the styling
+	 * @param color		color of the styling
+	 * @param points	size of the font
+	 * @param leading	scaling of the items
+	 */
 	private Style(int indent, Color color, int points, int leading) {
 		this.indent = indent;
 		this.color = color;
-		font = new Font(FONTNAME, Font.BOLD, fontSize=points);
+		this.font = new Font(FONTNAME, Font.BOLD, fontSize=points);
 		this.leading = leading;
 	}
 
+	/**
+	 * function to get instance of Styles. Function is created in this way as to make sure everyone accesses the same Styles
+	 * @param level	Style level which is requested
+	 * @return		Style of a certain level
+	 */
 	public static Style getInstance(int level){
-		if(styles == null){			//check if Style exists
-
-			//create styles
+		//Check if styles have been created. If not start creation of styles
+		if(styles == null){
+			//create styles array
 			styles = new Style[5];
-			// De styles zijn vast ingecodeerd.
+			//The styles are always the same
 			styles[0] = new Style(0, Color.red,   48, 20);	// style voor item-level 0
 			styles[1] = new Style(20, Color.blue,  40, 10);	// style voor item-level 1
 			styles[2] = new Style(50, Color.black, 36, 10);	// style voor item-level 2
@@ -57,10 +69,6 @@ public class Style {
 
 	public Font getFont(float scale) {
 		return font.deriveFont(fontSize * scale);
-	}
-
-	public int getFontSize() {
-		return fontSize;
 	}
 
 	public int getLeading() {

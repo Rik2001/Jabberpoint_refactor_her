@@ -2,8 +2,6 @@ package com.nhlstenden.Controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-
-import com.nhlstenden.Presentation.*;
 import com.nhlstenden.Viewer.Events;
 import com.nhlstenden.Viewer.Mediator;
 
@@ -18,12 +16,15 @@ import com.nhlstenden.Viewer.Mediator;
 */
 
 public class KeyController extends KeyAdapter {
-	private Mediator mediator;
-	private Presentation presentation; //Commands are given to the presentation
+	private final Mediator mediator;
 	public KeyController(Mediator mediator) {
 		this.mediator = mediator;
 	}
 
+	/**
+	 * Executes a function when a certain key is pressed.
+	 * @param keyEvent the event to be processed
+	 */
 	public void keyPressed(KeyEvent keyEvent) {
 		switch(keyEvent.getKeyCode()) {
 			case KeyEvent.VK_PAGE_DOWN:
@@ -39,7 +40,7 @@ public class KeyController extends KeyAdapter {
 				break;
 			case 'q':
 			case 'Q':
-				System.exit(0);
+				mediator.update(Events.EXIT, 0);
 				break; //Should not be reached
 			default:
 				break;

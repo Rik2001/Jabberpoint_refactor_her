@@ -7,12 +7,9 @@ import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import com.nhlstenden.Parser.*;
-import com.nhlstenden.Presentation.Presentation;
 import com.nhlstenden.Viewer.Events;
 import com.nhlstenden.Viewer.Mediator;
 

@@ -29,10 +29,6 @@ import com.nhlstenden.Presentation.*;
  */
 
 public class XMLParser implements Parser {
-	
-    /** Default API to use. */
-    private static final String DEFAULT_API_TO_USE = "dom";
-    
     /** Names of xml tags of attributes */
 	private static final String SHOWTITLE = "showtitle";
 	private static final String SLIDETITLE = "title";
@@ -74,7 +70,6 @@ public class XMLParser implements Parser {
 	/**
 	 * load a com.nhlstenden.Presentation from an XML file
 	 * @param fileName		namme of the XML-file which holds the presentation
-	 * @throws IOException
 	 */
 
 	public Presentation loadPresentation(String fileName){
@@ -93,16 +88,15 @@ public class XMLParser implements Parser {
 				loadSlide(presentation, xmlSlide);														//load a slide
 			}																					//exit slide loop
 		}
-		catch (IOException iox) {
-			System.err.println(iox.toString());
-		}
 		catch (SAXException sax) {
 			System.err.println(sax.getMessage());
 		}
 		catch (ParserConfigurationException pcx) {
 			System.err.println(PCE);
-		}
-		return presentation;
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return presentation;
 	}
 
 	/**
@@ -167,7 +161,7 @@ public class XMLParser implements Parser {
 	 * @param fileName		name of the saveFile
 	 */
 	public void savePresentation(Presentation presentation, String fileName) {
-        PrintWriter xmlSaveFile = null;																//create saveFile
+        PrintWriter xmlSaveFile;																//create saveFile
         try {
             xmlSaveFile = new PrintWriter(new FileWriter(fileName));
         } catch (IOException e) {
@@ -201,7 +195,7 @@ public class XMLParser implements Parser {
 					xmlSaveFile.print("\"image\" level=\"" + slideItem.getLevel() + "\">");			//add kind and level information
 					xmlSaveFile.print( ( (BitmapItem) slideItem).getName());						//add bitmapName within an item
 				}
-				else																				//if item is neither a textitem or bitmapitem
+				else																				//if item is neither a textitem nor bitmapitem
 				{
 					System.out.println("Ignoring " + slideItem);
 				}
