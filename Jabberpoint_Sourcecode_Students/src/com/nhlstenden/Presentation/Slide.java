@@ -19,7 +19,7 @@ import java.util.Vector;
 
 public class Slide {
 	private String title; //The title is kept separately
-	private Vector<SlideItem> slideItems; //The SlideItems are kept in a vector
+	private final Vector<SlideItem> slideItems; //The SlideItems are kept in a vector
 
 	public Slide() {
 		slideItems = new Vector<>();

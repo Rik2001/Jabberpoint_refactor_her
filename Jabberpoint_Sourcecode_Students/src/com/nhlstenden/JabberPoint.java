@@ -1,13 +1,7 @@
 package com.nhlstenden;
 
 import com.nhlstenden.Parser.XMLParser;
-
-import javax.swing.JOptionPane;
-
-import java.io.IOException;
-
 import com.nhlstenden.Presentation.Presentation;
-import com.nhlstenden.Viewer.Mediator;
 import com.nhlstenden.Viewer.SlideViewerFrame;
 
 /** JabberPoint Main Program
@@ -25,8 +19,6 @@ import com.nhlstenden.Viewer.SlideViewerFrame;
  */
 
 public class JabberPoint {
-	protected static final String IOERR = "IO Error: ";
-	protected static final String JABERR = "Jabberpoint Error ";
 	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
 	protected static final String DEMOPRESENTATION = "demoPresentation.xml";
 

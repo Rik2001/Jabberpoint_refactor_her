@@ -53,7 +53,6 @@ public class SlideViewerComponent extends JComponent implements Mediator{
 	 */
 	@Override
 	public void update(Events event, int value) {
-		//TODO: Think of way to change int value to something more generally usable
 		XMLParser xmlParser = new XMLParser();
 		switch (event)
 		{
